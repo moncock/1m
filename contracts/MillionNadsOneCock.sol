@@ -9,7 +9,8 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 contract MillionNadsOneCock is ERC721, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     uint256 private _nextTokenId;
-    string public baseURI = "https://moncock.github.io/1m/1m.png";
+    string private _img = "https://moncock.github.io/1m/1m.png";
+    string private _desc = "From zero to 1M-Moncock witnessed it all. Now it's your turn to hold a piece of the legend.";
 
     constructor()
         ERC721("Million Nads, One Cock", "MNOC")
@@ -25,15 +26,18 @@ contract MillionNadsOneCock is ERC721, AccessControl {
     }
 
     // metadata
-    function setBaseURI(string calldata _newBaseURI) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        baseURI = _newBaseURI;
+    function setImg(string calldata newImg) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        _img = newImg;
+    }
+    function setDesc(string calldata newDesc) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        _desc = newDesc;
     }
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         return string.concat(
             "data:application/json;utf8,",
             '{"name": "Million Nads, One Cock #', Strings.toString(tokenId),
-            '","description":"From zero to 1M-Moncock witnessed it all. Now it\'s your turn to hold a piece of the legend.',
-            '","image":"', baseURI, '"}'
+            '","description":"', _desc,
+            '","image":"', _img, '"}'
         );
     }
 
